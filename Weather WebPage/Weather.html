@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta name="veiwport" content="width=device-width, initial-scale=1.0">
+ <title >Weather App</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200;400;700&family=Poppins:ital,wght@0,300;0,400;1,500&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="Cssfile.css">
+</head>
+<body>
+<div class="Card">
+    <div class="Search">
+        <input type="text" placeholder="Enter City Name" spellcheck="false">
+        <button><img src="Image\8666693_search_icon.png"></button>
+    </div>
+    <div class="Weather">
+        <img src="Image/cloudy-day.png" class="Weather-icon">
+        <h1 class="temp">-°C</h1>
+        <h2 class="city">------</h2>
+        <div class="detail">
+            <div class="col">
+                <img src="Image/humidity-icon-2048x1675-xxsge5os.png" >
+                <div>
+                    <p class="humidity">--%</p>
+                    <p>Humidity</p>
+                </div>
+            </div>
+            <div class="col">
+                <img src="Image/png-transparent-computer-icons-wind-symbol-wind-angle-text-logo-fotor-bg-remover-20231117235049.png" >
+                <div>
+                    <p class="wind">-- km/h</p>
+                    <p>Wind Speed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const ApiKey = "c6a09ab63c5e0f256709803b07d5e243";
+    const ApiUrl = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
+    
+    const searchButton = document.querySelector(".Search button");
+    const Weather_icon = document.querySelector(".Weather-icon");
+    
+    searchButton.addEventListener("click", () => {
+        var searchbox = document.querySelector(".Search input").value;
+        checkWeather(searchbox);
+    });
+
+    console.log(ApiKey);
+
+    async function checkWeather(city)
+    {
+        console.log(city);
+        const response = await fetch(`${ApiUrl}${city}&appid=${ApiKey}`);
+        var data = await response.json();
+        console.log(data);
+        document.querySelector(".city").innerHTML = data.name;
+        document.querySelector(".temp").innerHTML = Math.round(data.main.temp)+'°C';
+        document.querySelector(".humidity").innerHTML = data.main.humidity+'%';
+        document.querySelector(".wind").innerHTML = data.wind.speed+' km/h';
+
+        //Image
+        if(data.weather[0].main=='Clouds')
+        {
+            Weather_icon.src = "cloudy-day.png";
+        }
+        else if (data.weather[0].main=='Clear') {
+            Weather_icon.src = "Clear Sky.png";  
+        } else if (data.weather[0].main=='Rain')
+        {
+            Weather_icon.src = "Rainy.png"
+        }else if (data.weather[0].main=='Drizzle')
+        {
+            Weather_icon.src = "Drizzle Sky-fotor-bg-remover-2023111821727.png"
+        }else if (data.weather[0].main=='Mist')
+        {
+            Weather_icon.src = "mistsky-fotor-bg-remover-2023111822320.png"
+        }else if (data.weather[0].main=='Snow')
+        {
+            Weather_icon.src = "Snow Sky.png"
+        }
+    }
+</script>
+</body>
+</html>
